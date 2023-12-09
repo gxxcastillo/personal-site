@@ -1,0 +1,9 @@
+.SiteHeader {
+  display: flex;
+  flex-direction: row;
+  column-gap: 6.4rem;
+}
+
+.home {
+  font-size: 2.4rem
+}

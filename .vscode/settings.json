@@ -1,0 +1,35 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
+  "stylelint.enable": true,
+  "stylelint.validate": ["css", "postcss", "scss"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[mdx]": {
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 130
+  },
+  "stylelint.snippet": ["css", "postcss", "scss"],
+  "local-history.path": "~/.config/vscode-history",
+  "cSpell.words": [
+    "antd",
+    "checkmark",
+    "codegen",
+    "esbuild",
+    "FILESTACK",
+    "Frontmatter",
+    "gcblog",
+    "graphene",
+    "nrwl",
+    "pnpx",
+    "rehype",
+    "unoptimized"
+  ],
+  "sass.format.convert": false,
+  "sass.format.deleteEmptyRows": false,
+  "sass.format.deleteWhitespace": false,
+  "sass.format.enabled": false,
+  "sass.format.setPropertySpace": false
+}

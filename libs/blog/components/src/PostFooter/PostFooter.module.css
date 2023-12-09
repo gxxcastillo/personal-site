@@ -1,0 +1,11 @@
+.PostFooter {
+}
+
+.tags {
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: row;
+  column-gap: 1.4rem;
+  justify-content: baseline;
+  align-items: flex-start;
+}

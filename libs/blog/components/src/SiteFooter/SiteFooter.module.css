@@ -1,0 +1,7 @@
+.SiteFooter {
+  color: purple;
+}
+
+.SiteFooter:hover {
+  cursor: pointer;
+}

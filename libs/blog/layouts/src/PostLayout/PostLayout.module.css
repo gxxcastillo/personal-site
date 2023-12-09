@@ -1,0 +1,8 @@
+.PostLayout {
+  width: 48rem;
+  margin: 6rem auto;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 2.4rem;
+}

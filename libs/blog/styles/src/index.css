@@ -1,0 +1,18 @@
+@use './reset';
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.8rem;
+  line-height: 1.5em;
+}
+
+a {
+  text-underline-offset: .2em;
+}
+
+p {
+  margin-bottom: 1em;
+}

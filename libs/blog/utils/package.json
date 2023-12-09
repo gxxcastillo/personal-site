@@ -1,0 +1,8 @@
+{
+  "name": "@gxxc-blog/utils",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": "./index.js",
+  "typings": "./index.d.ts",
+  "dependencies": {}
+}
