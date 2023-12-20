@@ -1,12 +1,14 @@
 export type FrontMatterImageDeclaration = Record<string, string>;
 export type FrontMatterImageMapping = Record<string, string>;
 
+export type PostStatus = 'DRAFT' | 'PUBLISHED';
+
 export interface PostAuthor {
   name?: string;
   email?: string;
 }
 
-export type DateString = string;
+export type DateString = Date;
 
 export interface PostMetadata {
   title?: string;
@@ -16,4 +18,6 @@ export interface PostMetadata {
   date: DateString;
   tags?: string[];
   author?: PostAuthor;
+  status?: PostStatus;
+  images?: FrontMatterImageDeclaration;
 }

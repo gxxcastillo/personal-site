@@ -1,7 +1,7 @@
 {
   "name": "layouts",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/layouts/src",
+  "sourceRoot": "libs/blog/layouts/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/layouts/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["libs/blog/layouts/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "build": {
@@ -17,7 +17,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/libs/layouts"
+        "outputPath": "dist/libs/blog/layouts"
       },
       "configurations": {
         "development": {
@@ -33,7 +33,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/libs/layouts"
+        "reportsDirectory": "../../coverage/libs/blog/layouts"
       }
     }
   }

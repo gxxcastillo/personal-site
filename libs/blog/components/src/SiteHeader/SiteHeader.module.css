@@ -1,9 +1,10 @@
 .SiteHeader {
   display: flex;
   flex-direction: row;
+  align-items: center;
   column-gap: 6.4rem;
 }
 
 .home {
-  font-size: 2.4rem
+  font-size: 2.2rem;
 }

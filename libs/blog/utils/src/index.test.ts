@@ -1,5 +1,4 @@
-import { readdirSync, statSync, promises } from 'fs';
-import { getPageSlugs, getFilePathArrays } from './index';
+import { getFilePathArrays } from './index';
 
 describe('utils', () => {
   describe('recursiveDirectoryRead()', () => {

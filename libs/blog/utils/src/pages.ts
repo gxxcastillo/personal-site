@@ -10,7 +10,10 @@ import {
   PAGES_ROOT_PATH,
 } from './utils';
 
-import { type FrontMatterImageDeclaration } from './types';
+import {
+  PostMetadata,
+  type FrontMatterImageDeclaration,
+} from '@gxxc-blog/types';
 
 export function getFilePathArrays() {
   const absoluteFileNames = recursiveDirectoryRead(PAGES_ROOT_PATH);
@@ -65,11 +68,14 @@ export async function loadRawPage(page: string[]) {
 
 export async function loadPage(page: string[]) {
   const pageText = await loadRawPage(page);
-  const mdxSource = await serialize(pageText, { parseFrontmatter: true });
+  const mdxSource = await serialize<Record<string, unknown>, PostMetadata>(
+    pageText,
+    { parseFrontmatter: true }
+  );
 
   const frontmatter = mdxSource?.frontmatter;
   mdxSource.scope.images = await parseFrontMatterImages(
-    frontmatter?.images as FrontMatterImageDeclaration
+    frontmatter?.images
   );
   mdxSource.frontmatter = addExtraMetadata(
     slugArrayToString(page),

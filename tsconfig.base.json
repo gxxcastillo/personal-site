@@ -8,8 +8,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2015",
-    "module": "esnext",
+    "target": "ES2020",
+    "module": "ESNext",
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
@@ -18,8 +18,8 @@
       "@gxxc-blog/components": ["libs/blog/components/src/index.ts"],
       "@gxxc-blog/content": ["libs/blog/content/src/index.ts"],
       "@gxxc-blog/layouts": ["libs/blog/layouts/src/index.ts"],
-      "@gxxc-blog/utils": ["libs/blog/utils/src/index.ts"],
-      "@gxxc-blog/tmp": ["libs/blog/tmp/src/index.ts"]
+      "@gxxc-blog/types": ["libs/blog/types/src/index.ts"],
+      "@gxxc-blog/utils": ["libs/blog/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

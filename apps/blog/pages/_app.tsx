@@ -2,6 +2,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 
 import { SiteHeader, SiteNav } from '@gxxc-blog/components';
+
 import '@gxxc-blog/styles';
 
 import styles from './_app.module.css';

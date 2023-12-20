@@ -5,16 +5,32 @@ import { titleCase } from 'title-case';
 import { serialize } from 'next-mdx-remote/serialize';
 
 import { workspaceRoot } from '@nx/devkit';
-import { type FrontMatterImageDeclaration, type FrontMatterImageMapping } from './types';
-export * from './types';
+import {
+  type FrontMatterImageDeclaration,
+  type FrontMatterImageMapping,
+} from '@gxxc-blog/types';
+import { PostMetadata } from '@gxxc-blog/types';
 
 const { readFile } = promises;
 
-export const PAGES_ROOT_PATH = path.join(workspaceRoot, '/libs/blog/content/pages');
-export const POSTS_ROOT_PATH = path.join(workspaceRoot, '/libs/blog/content/posts');
-export const IMAGES_ROOT_PATH = path.join(workspaceRoot, '/libs/blog/assets/img');
+export const PAGES_ROOT_PATH = path.join(
+  workspaceRoot,
+  '/libs/blog/content/pages'
+);
+export const POSTS_ROOT_PATH = path.join(
+  workspaceRoot,
+  '/libs/blog/content/posts'
+);
+export const IMAGES_ROOT_PATH = path.join(
+  workspaceRoot,
+  '/libs/blog/assets/img'
+);
 
-export function isTrue(val?: string) {
+export function isEnvTrue(val?: string, defaultValue?: boolean) {
+  if (val === undefined) {
+    return defaultValue;
+  }
+
   return val === 'true' || 'TRUE';
 }
 
@@ -50,9 +66,12 @@ export async function loadRawPost(slug: string) {
 
 export async function loadPost(slug: string) {
   const postText = await loadRawPost(slug);
-  const mdxSource = await serialize(postText, {
-    parseFrontmatter: true
-  });
+  const mdxSource = await serialize<Record<string, unknown>, PostMetadata>(
+    postText,
+    {
+      parseFrontmatter: true,
+    }
+  );
 
   const metadata = addExtraMetadata(slug, mdxSource.frontmatter);
   mdxSource.frontmatter = metadata;
@@ -65,23 +84,30 @@ export function slugArrayToString(slugArray: string[]) {
   return relativePath ? `${relativePath}/${file}` : file;
 }
 
-export function addExtraMetadata<D extends Record<string, unknown>>(path: string, data: D) {
+export function addExtraMetadata<D extends PostMetadata>(
+  path: string,
+  data: D
+) {
   const slug = filePathToSlug(path);
   const extraData = {
     path: `/post/${slug}`,
     title: data.title || titleCase(noCase(slug)),
-    slug
+    slug,
   };
 
   return {
     ...data,
-    ...extraData
+    ...extraData,
   };
 }
 
 export function createImageLoader() {
   // Uses webpack custom context: https://webpack.js.org/guides/dependency-management/#require-context
-  return (require as any).context('../../assets/img', false, /\.(png|jpe?g|svg|gif)$/);
+  return (require as any).context(
+    '../../assets/img',
+    false,
+    /\.(png|jpe?g|svg|gif)$/
+  );
 }
 
 export async function importImage(key: string) {
@@ -89,7 +115,9 @@ export async function importImage(key: string) {
   return await imageLoader(`./${key}`).default;
 }
 
-export async function parseFrontMatterImages(images?: FrontMatterImageDeclaration) {
+export async function parseFrontMatterImages(
+  images?: FrontMatterImageDeclaration
+) {
   return typeof images === 'object'
     ? Object.entries(images).reduce(
         async (obj: Promise<FrontMatterImageMapping>, [name, value]) => {

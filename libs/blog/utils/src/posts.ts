@@ -2,33 +2,59 @@ import matter, { GrayMatterFile } from 'gray-matter';
 
 import { readdirSync, statSync } from 'node:fs';
 
-import { type PostMetadata } from './types';
+import { type PostMetadata } from '@gxxc-blog/types';
 import {
   recursiveDirectoryRead,
   filePathToSlug,
   addExtraMetadata,
   POSTS_ROOT_PATH,
-  isTrue,
+  isEnvTrue,
 } from './utils';
-export * from './types';
+
+export type GrayMatterSource = GrayMatterFile<string> & { data: PostMetadata };
 
 export function getPostSlugs() {
   const absoluteFileNames = recursiveDirectoryRead(POSTS_ROOT_PATH);
   const startIndex = POSTS_ROOT_PATH.length + 1;
 
-  return absoluteFileNames?.map((fileName) => {
-    const lastSegment = fileName?.lastIndexOf('/');
-    fileName =
-      fileName.slice(lastSegment) === 'index'
-        ? fileName.slice(0, lastSegment)
-        : fileName;
+  return absoluteFileNames
+    ?.map((fileName) => {
+      const source = readFileMetaData(fileName);
+      if (!canShowPost(source.data)) {
+        return undefined;
+      }
 
-    return filePathToSlug(fileName?.slice(startIndex));
-  });
+      const lastSegment = fileName?.lastIndexOf('/');
+      fileName =
+        fileName.slice(lastSegment) === 'index'
+          ? fileName.slice(0, lastSegment)
+          : fileName;
+
+      return filePathToSlug(fileName?.slice(startIndex));
+    })
+    .filter((result) => {
+      return !!result;
+    });
 }
 
 export function getPostStaticPaths() {
   return getPostSlugs().map((slug) => ({ params: { slug } }));
+}
+
+export function canShowPost(data: PostMetadata) {
+  const today = new Date();
+
+  if (isEnvTrue(process.env.SHOW_PUBLISHED_ONLY, true)) {
+    if (!data.date || data.date > today || data.status !== 'PUBLISHED') {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+export function readFileMetaData(absoluteFilename: string) {
+  return matter.read(absoluteFilename) as GrayMatterSource;
 }
 
 export function loadPosts(limit = 10) {
@@ -44,19 +70,17 @@ export function loadPosts(limit = 10) {
         return undefined;
       }
 
-      const source = matter.read(absoluteFilename);
+      const source = readFileMetaData(absoluteFilename);
       const data = addExtraMetadata(path, source.data);
 
-      if (!isTrue(process.env.SHOW_ALL_POSTS)) {
-        if (data.date > today || data.status !== 'PUBLISHED') {
-          return undefined;
-        }
+      if (!canShowPost(data)) {
+        return undefined;
       }
 
       source.data = data;
       return source;
     })
-    .filter((p): p is GrayMatterFile<string> => !!p);
+    .filter((p): p is GrayMatterSource => !!p);
 }
 
 export function getRecentPosts(limit?: number) {

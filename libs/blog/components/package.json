@@ -3,11 +3,5 @@
   "version": "0.0.1",
   "type": "module",
   "exports": "./index.js",
-  "types": "./index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.js"
-    }
-  }
+  "types": "./index.d.ts"
 }

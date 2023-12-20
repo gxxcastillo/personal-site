@@ -1,7 +1,7 @@
 {
   "name": "components",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/components/src",
+  "sourceRoot": "libs/blog/components/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,7 +9,7 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/components/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["libs/blog/components/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "build": {
@@ -17,7 +17,7 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/libs/components"
+        "outputPath": "dist/libs/blog/components"
       },
       "configurations": {
         "development": {
@@ -33,7 +33,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../coverage/libs/components"
+        "reportsDirectory": "../coverage/libs/blog/components"
       }
     }
   }

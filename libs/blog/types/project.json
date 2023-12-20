@@ -1,14 +1,14 @@
 {
-  "name": "utils",
-  "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/blog/utils/src",
+  "name": "types",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/blog/types/src",
   "projectType": "library",
   "targets": {
     "build": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/blog/libs/utils"
+        "outputPath": "dist/libs/blog/types"
       }
     },
     "test": {
@@ -16,7 +16,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "passWithNoTests": true,
-        "reportsDirectory": "../coverage/blog/libs/utils"
+        "reportsDirectory": "../../../coverage/libs/blog/types"
       }
     },
     "lint": {
@@ -24,8 +24,8 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "libs/blog/utils/**/*.ts",
-          "libs/blog/utils/package.json"
+          "libs/blog/types/**/*.ts",
+          "libs/blog/types/package.json"
         ]
       }
     }

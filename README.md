@@ -31,3 +31,11 @@ nx run-many -t <target1> <target2>
 ```
 nx run-many -t <target1> <target2> -p <proj1> <proj2>
 ```
+
+## Options
+
+### Environment Variables
+
+> SHOW_PUBLISHED_ONLY | boolean | default: false
+
+When set to true, only published posts will be shown.

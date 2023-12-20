@@ -1,16 +1,24 @@
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
-import { MDXRemote } from 'next-mdx-remote';
+import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 
 import { PostLayout } from 'libs/blog/layouts/src';
 import * as BlogComponents from 'libs/blog/components/src';
 
-import { getPostSlugs, getPostStaticPaths, loadPost } from '@gxxc-blog/utils';
+import { getPostStaticPaths, loadPost } from '@gxxc-blog/utils';
+
+export type PostProps = { source: MDXRemoteProps<Record<string, unknown>, { frontmatter: string, title: string, tags: string[] }> }
+
+export type PostPageGetStaticPropsArgs = {
+  params: {
+    slug: string
+  }
+}
 
 const { PostFooter, PostHeader } = BlogComponents;
 
-export default function PostPage({ source }) {
+export default function PostPage({ source }: PostProps) {
   const router = useRouter();
   const { slug } = router.query;
   const Components = Object.assign({}, BlogComponents, {
@@ -36,7 +44,7 @@ export default function PostPage({ source }) {
   );
 }
 
-export async function getStaticProps({ params: { slug } }) {
+export async function getStaticProps({ params: { slug } }: PostPageGetStaticPropsArgs) {
   const source = await loadPost(slug);
 
   return { props: { source } };
