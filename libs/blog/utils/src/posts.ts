@@ -58,44 +58,47 @@ export function readFileMetaData(absoluteFilename: string) {
 }
 
 export function loadPosts(limit = 10) {
-  const today = new Date();
-
   return readdirSync(POSTS_ROOT_PATH)
     .filter((fname) => /\.mdx?$/.test(fname))
     .filter((fname) => !fname.startsWith('.'))
-    .map((path, index) => {
+    .map((path) => {
       const absoluteFilename = `${POSTS_ROOT_PATH}/${path}`;
       const isDirectory = statSync(absoluteFilename).isDirectory();
-      if (isDirectory || index >= limit) {
+      if (isDirectory) {
         return undefined;
       }
 
       const source = readFileMetaData(absoluteFilename);
-      const data = addExtraMetadata(path, source.data);
+      if (typeof source.data.date !== 'object') {
+        source.data.date = new Date(source.data.date);
+      }
 
-      if (!canShowPost(data)) {
+      if (!canShowPost(source.data)) {
         return undefined;
       }
 
+      const data = addExtraMetadata(path, source.data);
       source.data = data;
+
       return source;
     })
-    .filter((p): p is GrayMatterSource => !!p);
+    .filter((p): p is GrayMatterSource => !!p)
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .slice(0, 10);
 }
 
 export function getRecentPosts(limit?: number) {
-  return loadPosts(limit)
-    .map(({ data, content }) => {
-      if (!data.excerpt) {
-        data.excerpt =
-          content.length > 290 ? `${content.slice(0, 290)}\u2026` : content;
-      }
+  return loadPosts(limit).map(({ data, content }) => {
+    if (!data.excerpt) {
+      data.excerpt =
+        content.length > 290 ? `${content.slice(0, 290)}\u2026` : content;
+    }
 
-      return data as PostMetadata;
-    })
-    .filter((d?): d is PostMetadata => !!d)
-    .sort((dataA: PostMetadata, dataB: PostMetadata) => {
-      return +new Date(dataB.date) - +new Date(dataA.date);
-    })
-    .slice(0, 10);
+    const recentPosts = {
+      ...data,
+      date: data.date.getTime(),
+    };
+
+    return recentPosts;
+  });
 }
