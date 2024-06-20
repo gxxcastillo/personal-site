@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import styles from './PostFooter.module.css';
 
 export interface PostFooterProps {
-  tags: string[];
+  tags?: string[];
   children: ReactNode;
 }
 

@@ -2,7 +2,14 @@
   "name": "@gxxc-blog/utils",
   "version": "0.0.1",
   "type": "module",
-  "exports": "./index.js",
-  "typings": "./index.d.ts",
-  "dependencies": {}
+  "exports": "./src/index.ts",
+  "dependencies": {
+    "@gxxc-blog/types": "workspace:^",
+    "@mdx-js/mdx": "^3.0.1",
+    "change-case": "^5.4.4",
+    "react": "18.3.1",
+    "remark-frontmatter": "^5.0.0",
+    "remark-mdx-frontmatter": "^4.0.0",
+    "title-case": "^4.3.1"
+  }
 }

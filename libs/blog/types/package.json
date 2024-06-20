@@ -1,8 +1,6 @@
 {
   "name": "@gxxc-blog/types",
   "version": "0.0.1",
-  "dependencies": {},
-  "main": "./index.js",
-  "module": "./index.mjs",
-  "typings": "./index.d.ts"
+  "type": "module",
+  "exports": "./src/index.ts"
 }

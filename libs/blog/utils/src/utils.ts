@@ -1,28 +1,33 @@
-import { readdirSync, statSync, promises, existsSync } from 'node:fs';
+import { readdirSync, statSync, promises } from 'node:fs';
 import * as path from 'node:path';
+import { compile, run, evaluate, UseMdxComponents } from '@mdx-js/mdx';
+import remarkFrontmatter from 'remark-frontmatter';
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
+import * as runtime from 'react/jsx-runtime';
+
 import { noCase } from 'change-case';
 import { titleCase } from 'title-case';
-import { serialize } from 'next-mdx-remote/serialize';
 
-import { workspaceRoot } from '@nx/devkit';
 import {
+  type PostMetadata,
   type FrontMatterImageDeclaration,
   type FrontMatterImageMapping,
 } from '@gxxc-blog/types';
-import { PostMetadata } from '@gxxc-blog/types';
+import { ComponentType } from 'react';
 
 const { readFile } = promises;
 
+const WORKSPACE_ROOT = process.env.NX_WORKSPACE_ROOT as string;
 export const PAGES_ROOT_PATH = path.join(
-  workspaceRoot,
+  WORKSPACE_ROOT,
   '/libs/blog/content/pages'
 );
 export const POSTS_ROOT_PATH = path.join(
-  workspaceRoot,
+  WORKSPACE_ROOT,
   '/libs/blog/content/posts'
 );
 export const IMAGES_ROOT_PATH = path.join(
-  workspaceRoot,
+  WORKSPACE_ROOT,
   '/libs/blog/assets/img'
 );
 
@@ -66,19 +71,19 @@ export async function loadRawPost(slug: string) {
 
 export async function loadPost(slug: string) {
   const postText = await loadRawPost(slug);
-  const mdxSource = await serialize<Record<string, unknown>, PostMetadata>(
-    postText,
-    {
-      parseFrontmatter: true,
-    }
-  );
+  // @ts-expect-error hopefully this gets resolved with an upcoming update
+  const { default: MdxContent, frontmatter } = await evaluate(postText, {
+    ...runtime,
+    remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
+  });
 
-  const metadata = addExtraMetadata(slug, mdxSource.frontmatter);
-  mdxSource.frontmatter = metadata;
-  return mdxSource;
+  return { MdxContent, frontmatter } as {
+    MdxContent: ComponentType<{ [str: string]: unknown }>;
+    frontmatter: PostMetadata;
+  };
 }
 
-export function slugArrayToString(slugArray: string[]) {
+export function slugArrayToString(slugArray: string[] = []) {
   const file = slugArray?.at(-1) ?? 'index';
   const relativePath = slugArray.slice(0, -1)?.join('/');
   return relativePath ? `${relativePath}/${file}` : file;

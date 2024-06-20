@@ -1,0 +1,13 @@
+{
+  "name": "@gabrielcastillo.xyz/blog",
+  "version": "0.0.0",
+  "type": "module",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@gxxc-blog/components": "workspace:^",
+    "@gxxc-blog/layouts": "workspace:^",
+    "@gxxc-blog/utils": "workspace:^",
+    "remark-frontmatter": "^5.0.0"
+  }
+}

@@ -23,14 +23,10 @@
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
-    "../../apps/blog/.next/types/**/*.ts",
-    "../../dist/apps/blog/.next/types/**/*.ts",
-    "next-env.d.ts"
+    "./.next/types/**/*.ts",
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "../../dist/blog/.next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    "jest.config.ts",
-    "src/**/*.spec.ts",
-    "src/**/*.test.ts"
-  ]
+  "exclude": ["node_modules", "jest.config.ts", "**/*.spec.ts", "**/*.test.ts"]
 }

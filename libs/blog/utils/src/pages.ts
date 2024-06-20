@@ -1,19 +1,17 @@
 import { statSync, promises, existsSync } from 'node:fs';
-import { serialize } from 'next-mdx-remote/serialize';
+import { evaluate } from '@mdx-js/mdx';
+import remarkFrontmatter from 'remark-frontmatter';
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
+import * as runtime from 'react/jsx-runtime';
 
 import {
   recursiveDirectoryRead,
   filePathToSlug,
-  parseFrontMatterImages,
-  addExtraMetadata,
-  slugArrayToString,
   PAGES_ROOT_PATH,
 } from './utils';
 
-import {
-  PostMetadata,
-  type FrontMatterImageDeclaration,
-} from '@gxxc-blog/types';
+import { PostMetadata } from '@gxxc-blog/types';
+import { ComponentType } from 'react';
 
 export function getFilePathArrays() {
   const absoluteFileNames = recursiveDirectoryRead(PAGES_ROOT_PATH);
@@ -45,11 +43,14 @@ export function getPageSlugArrays() {
   const startIndex = PAGES_ROOT_PATH.length + 1;
   return absoluteFileNames?.map((fileName) => {
     const slugArray = filePathToSlug(fileName?.slice(startIndex)).split('/');
-    return slugArray.at(-1) === 'index' ? slugArray.slice(0, -1) : slugArray;
+    if (slugArray.at(-1) === 'index') {
+      slugArray.pop();
+    }
+    return slugArray;
   });
 }
 
-export async function loadRawPage(page: string[]) {
+export async function loadRawPage(page: string[] = []) {
   const file = page?.at(-1) ?? 'index';
   const relativePath = page.slice(0, -1)?.join('/');
   const absolutePath = relativePath
@@ -66,25 +67,20 @@ export async function loadRawPage(page: string[]) {
   return await readFile(fileName, 'utf8');
 }
 
-export async function loadPage(page: string[]) {
+export async function loadPageContent(page: string[]) {
   const pageText = await loadRawPage(page);
-  const mdxSource = await serialize<Record<string, unknown>, PostMetadata>(
-    pageText,
-    { parseFrontmatter: true }
-  );
+  // @ts-expect-error hopefully this gets resolved with an upcoming update
+  const { default: MdxContent, frontmatter } = await evaluate(pageText, {
+    ...runtime,
+    remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
+  });
 
-  const frontmatter = mdxSource?.frontmatter;
-  mdxSource.scope.images = await parseFrontMatterImages(
-    frontmatter?.images
-  );
-  mdxSource.frontmatter = addExtraMetadata(
-    slugArrayToString(page),
-    frontmatter
-  );
-
-  return mdxSource;
+  return { MdxContent, frontmatter } as {
+    MdxContent: ComponentType<{ [str: string]: unknown }>;
+    frontmatter: PostMetadata;
+  };
 }
 
-export function getPageStaticPaths() {
-  return getPageSlugArrays().map((page) => ({ params: { page } }));
+export function getPageStaticParams() {
+  return getPageSlugArrays().map((page) => ({ page }));
 }

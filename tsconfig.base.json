@@ -4,7 +4,7 @@
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
@@ -13,14 +13,7 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@gxxc-blog/components": ["libs/blog/components/src/index.ts"],
-      "@gxxc-blog/content": ["libs/blog/content/src/index.ts"],
-      "@gxxc-blog/layouts": ["libs/blog/layouts/src/index.ts"],
-      "@gxxc-blog/types": ["libs/blog/types/src/index.ts"],
-      "@gxxc-blog/utils": ["libs/blog/utils/src/index.ts"]
-    }
+    "baseUrl": "."
   },
   "exclude": ["node_modules", "tmp"]
 }

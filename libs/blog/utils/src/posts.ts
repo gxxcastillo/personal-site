@@ -38,7 +38,7 @@ export function getPostSlugs() {
 }
 
 export function getPostStaticPaths() {
-  return getPostSlugs().map((slug) => ({ params: { slug } }));
+  return getPostSlugs().map((slug) => ({ slug }));
 }
 
 export function canShowPost(data: PostMetadata) {

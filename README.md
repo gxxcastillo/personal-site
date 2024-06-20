@@ -4,7 +4,7 @@
 
 This is my personal website, built with [NextJS](https://nextjs.org/) and using [NX](https://nx.dev/) for monorepo management.
 
-[next-mdx-remote](https://github.com/hashicorp/next-mdx-remote) is used to generate React components from [markdown](https://www.markdownguide.org/) files. All metadata is parsed from [YAML frontmatter](https://mdxjs.com/guides/frontmatter/) using [gray-matter](https://github.com/jonschlinkert/gray-matter).
+[@mdx-js/mdx](https://mdxjs.com/) is used to generate React components from [markdown](https://www.markdownguide.org/) files. All metadata is parsed from [YAML frontmatter](https://mdxjs.com/guides/frontmatter/) using [gray-matter](https://github.com/jonschlinkert/gray-matter).
 
 Raw content files live in the `@gxxc-blob/content` package and all page urls are auto-generated from the file names. Content files are ignored by git and I edit them using [Obsidian](https://obsidian.md/).
 
@@ -55,7 +55,5 @@ nx run-many -t <target1> <target2> -p <proj1> <proj2>
 SHOW_PUBLISHED_ONLY | boolean | default: false
 ```
 When set to true, only published posts will be shown.
-
-## Using the blog
 
 
