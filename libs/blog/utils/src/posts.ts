@@ -1,6 +1,10 @@
+import { readdirSync, statSync, promises } from 'node:fs';
+import { type ComponentType } from 'react';
+import { evaluate } from '@mdx-js/mdx';
 import matter, { GrayMatterFile } from 'gray-matter';
-
-import { readdirSync, statSync } from 'node:fs';
+import remarkFrontmatter from 'remark-frontmatter';
+import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
+import * as runtime from 'react/jsx-runtime';
 
 import { type PostMetadata } from '@gxxc-blog/types';
 import {
@@ -10,6 +14,8 @@ import {
   POSTS_ROOT_PATH,
   isEnvTrue,
 } from './utils';
+
+const { readFile } = promises;
 
 export type GrayMatterSource = GrayMatterFile<string> & { data: PostMetadata };
 
@@ -57,6 +63,25 @@ export function readFileMetaData(absoluteFilename: string) {
   return matter.read(absoluteFilename) as GrayMatterSource;
 }
 
+export async function loadRawPost(slug: string) {
+  const postPath = `${POSTS_ROOT_PATH}/${slug}.md`;
+  return await readFile(postPath, 'utf8');
+}
+
+export async function loadPost(slug: string) {
+  const postText = await loadRawPost(slug);
+  // @ts-expect-error hopefully this gets resolved with an upcoming update
+  const { default: MdxContent, frontmatter } = await evaluate(postText, {
+    ...runtime,
+    remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
+  });
+
+  return { MdxContent, frontmatter } as {
+    MdxContent: ComponentType<{ [str: string]: unknown }>;
+    frontmatter: PostMetadata;
+  };
+}
+
 export function loadPosts(limit = 10) {
   return readdirSync(POSTS_ROOT_PATH)
     .filter((fname) => /\.mdx?$/.test(fname))
@@ -84,7 +109,7 @@ export function loadPosts(limit = 10) {
     })
     .filter((p): p is GrayMatterSource => !!p)
     .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-    .slice(0, 10);
+    .slice(0, limit);
 }
 
 export function getRecentPosts(limit?: number) {

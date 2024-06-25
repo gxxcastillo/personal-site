@@ -1,9 +1,5 @@
-import { readdirSync, statSync, promises } from 'node:fs';
+import { readdirSync, statSync } from 'node:fs';
 import * as path from 'node:path';
-import { compile, run, evaluate, UseMdxComponents } from '@mdx-js/mdx';
-import remarkFrontmatter from 'remark-frontmatter';
-import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
-import * as runtime from 'react/jsx-runtime';
 
 import { noCase } from 'change-case';
 import { titleCase } from 'title-case';
@@ -13,9 +9,6 @@ import {
   type FrontMatterImageDeclaration,
   type FrontMatterImageMapping,
 } from '@gxxc-blog/types';
-import { ComponentType } from 'react';
-
-const { readFile } = promises;
 
 const WORKSPACE_ROOT = process.env.NX_WORKSPACE_ROOT as string;
 export const PAGES_ROOT_PATH = path.join(
@@ -36,7 +29,7 @@ export function isEnvTrue(val?: string, defaultValue?: boolean) {
     return defaultValue;
   }
 
-  return val === 'true' || 'TRUE';
+  return val === 'true' || val === 'TRUE';
 }
 
 export function recursiveDirectoryRead(path: string, fileNames: string[] = []) {
@@ -62,25 +55,6 @@ export function filePathToSlug(path: string) {
 
 export function toSlugArray(slug: string) {
   return slug.split('/');
-}
-
-export async function loadRawPost(slug: string) {
-  const postPath = `${POSTS_ROOT_PATH}/${slug}.md`;
-  return await readFile(postPath, 'utf8');
-}
-
-export async function loadPost(slug: string) {
-  const postText = await loadRawPost(slug);
-  // @ts-expect-error hopefully this gets resolved with an upcoming update
-  const { default: MdxContent, frontmatter } = await evaluate(postText, {
-    ...runtime,
-    remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
-  });
-
-  return { MdxContent, frontmatter } as {
-    MdxContent: ComponentType<{ [str: string]: unknown }>;
-    frontmatter: PostMetadata;
-  };
 }
 
 export function slugArrayToString(slugArray: string[] = []) {

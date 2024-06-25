@@ -6,7 +6,21 @@ This is my personal website, built with [NextJS](https://nextjs.org/) and using 
 
 [@mdx-js/mdx](https://mdxjs.com/) is used to generate React components from [markdown](https://www.markdownguide.org/) files. All metadata is parsed from [YAML frontmatter](https://mdxjs.com/guides/frontmatter/) using [gray-matter](https://github.com/jonschlinkert/gray-matter).
 
-Raw content files live in the `@gxxc-blob/content` package and all page urls are auto-generated from the file names. Content files are ignored by git and I edit them using [Obsidian](https://obsidian.md/).
+Raw content files are ignored by git and live in the `@gxxc-blob/content` package. I edit them using [Obsidian](https://obsidian.md/).
+
+## Adding content
+
+There are two types of content: posts and pages and both are generated from markdown files that use frontmatter to define metadata.
+
+To add a new post or page, create a new markdown file in the `@gxxc-blob/content` package. The file name will be used as the url slug and the frontmatter will be used to generate the post metadata.
+
+Note, while you could edit your files directly in your IDE, I recommend using [Obsidian](https://obsidian.md/) for a better editing experience.
+
+### Publishing content
+
+To mark content as available to the public, set the `published` field in the frontmatter to `true`. This will make the post visible in the UI.  The `date` field is used to restrict posts from being accidentally published too early.
+
+Once you've updated your content, create a new build and deploy the site with the latest changes.
 
 ## Start the app
 
@@ -33,7 +47,7 @@ Start the development server run `nx serve blog`. Open your browser and navigate
 
 ## Running Tasks
 
-To execute tasks with Nx use the following syntax:
+You can execute tasks with Nx use the following syntax:
 ```
 nx <target> <project> <...options>
 ```
