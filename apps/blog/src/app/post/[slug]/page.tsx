@@ -28,7 +28,7 @@ export default async function Post({ params }: PostPageGetStaticPropsArgs) {
     return <div>404</div>;
   }
 
-  const data = addExtraMetadata(slug, frontmatter);
+  const data = addExtraMetadata('post', slug, frontmatter);
   const images = await parseFrontMatterImages(frontmatter?.images);
 
   return (

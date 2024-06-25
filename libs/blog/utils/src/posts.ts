@@ -77,7 +77,7 @@ export function loadPosts(limit = 10) {
         return undefined;
       }
 
-      const data = addExtraMetadata(path, source.data);
+      const data = addExtraMetadata('post', path, source.data);
       source.data = data;
 
       return source;

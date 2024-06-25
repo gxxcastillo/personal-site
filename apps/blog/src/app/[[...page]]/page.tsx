@@ -17,7 +17,7 @@ export default async function Page({ params }: PageProps) {
   const components = Object.assign({}, BlogComponents, { Image });
   const { MdxContent, frontmatter } = await loadPageContent(params.page);
   const path = slugArrayToString(params.page);
-  const data = addExtraMetadata(path, frontmatter);
+  const data = addExtraMetadata('page', path, frontmatter);
   const images = await parseFrontMatterImages(frontmatter?.images);
 
   return (

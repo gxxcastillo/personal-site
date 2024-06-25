@@ -90,12 +90,13 @@ export function slugArrayToString(slugArray: string[] = []) {
 }
 
 export function addExtraMetadata<D extends PostMetadata>(
+  contentType: 'page' | 'post',
   path: string,
-  data: D
+  data = {} as D
 ) {
   const slug = filePathToSlug(path);
   const extraData = {
-    path: `/post/${slug}`,
+    path: `/${contentType}/${slug}`,
     title: data.title || titleCase(noCase(slug)),
     slug,
   };
