@@ -4,6 +4,9 @@
   "type": "module",
   "license": "MIT",
   "private": true,
+  "scripts": {
+    "deploy": "./scripts/deploy.sh"
+  },
   "dependencies": {
     "@gxxc-blog/components": "workspace:^",
     "@gxxc-blog/layouts": "workspace:^",

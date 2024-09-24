@@ -37,12 +37,6 @@
         }
       }
     },
-    "export": {
-      "executor": "@nx/next:export",
-      "options": {
-        "buildTarget": "blog:build:production"
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint"
     }

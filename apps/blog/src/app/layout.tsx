@@ -1,3 +1,4 @@
+import { SiteHeader, SiteNav } from 'libs/blog/components/src';
 import './global.css';
 
 export const metadata = {
@@ -12,7 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SiteHeader nav={<SiteNav />} />
+        {children}
+      </body>
     </html>
   );
 }
