@@ -20,7 +20,7 @@ Note, while you could edit your files directly in your IDE, I recommend using [O
 
 To mark content as available to the public, set the `published` field in the frontmatter to `true`. This will make the post visible in the UI.  The `date` field is used to restrict posts from being accidentally published too early.
 
-Once you've updated your content, create a new build and deploy the site with the latest changes.
+Once you've updated your content, create a new build and publish all content with the latest changes.
 
 ## Start the app
 

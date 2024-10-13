@@ -5,7 +5,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "deploy": "./scripts/deploy.sh"
+    "publish": "./scripts/publish.sh"
   },
   "dependencies": {
     "@gxxc-blog/components": "workspace:^",
