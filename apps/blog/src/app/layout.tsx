@@ -1,4 +1,4 @@
-import { SiteHeader, SiteNav } from 'libs/blog/components/src';
+import { SiteHeader, SiteNav } from '@gxxc-blog/components';
 import './global.css';
 
 export const metadata = {

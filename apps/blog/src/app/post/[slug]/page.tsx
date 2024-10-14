@@ -21,7 +21,7 @@ const { PostFooter, PostHeader } = BlogComponents;
 export default async function Post({ params }: PostPageGetStaticPropsArgs) {
   const { slug } = params;
   const components = Object.assign({}, BlogComponents, { Image });
-  const { MdxContent, frontmatter } = await loadPost(slug);
+  const { MdxContent, frontmatter } = await loadPost(params);
 
   if (!slug) {
     // @TODO - Will this ever happen? Can I just render the 404 page instead?

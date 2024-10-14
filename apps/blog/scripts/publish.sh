@@ -15,8 +15,8 @@ BUILD_PATH="${BUILD_PATH:-$NX_WORKSPACE_ROOT/dist/blog/.next}"
 echo -e "\nBuilding all blog assets..."
 pnpm nx build blog
 
-echo -e "\nRemoving .txt files..."
-find "$BUILD_PATH" -name '*.txt' -print -type f -delete
+echo -e "\nStripping .html file extensions"
+find . -type f -name "*.html" | while read file; do mv "$file" "${file%.html}"; done
 
 echo -e "\nSyncing files to S3..."
-aws s3 sync "$BUILD_PATH" "s3://$S3_BUCKET_NAME"
+aws s3 sync "$BUILD_PATH" "s3://$S3_BUCKET_NAME" --metadata-directive REPLACE --content-type "text/html" --exclude "*.*"

@@ -6,17 +6,18 @@ import { PageLayout } from '@gxxc-blog/layouts';
 import {
   addExtraMetadata,
   getPageStaticParams,
-  loadPageContent,
+  loadPage,
   parseFrontMatterImages,
   slugArrayToString,
 } from '@gxxc-blog/utils';
 
-export type PageProps = { params: { page: string[] } };
+export type PageProps = { params: { slug: string[] } };
 
 export default async function Page({ params }: PageProps) {
   const components = Object.assign({}, BlogComponents, { Image });
-  const { MdxContent, frontmatter } = await loadPageContent(params.page);
-  const path = slugArrayToString(params.page);
+
+  const { MdxContent, frontmatter } = await loadPage(params);
+  const path = slugArrayToString(params.slug);
   const data = addExtraMetadata('page', path, frontmatter);
   const images = await parseFrontMatterImages(frontmatter?.images);
 

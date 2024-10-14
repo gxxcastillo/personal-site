@@ -4,50 +4,13 @@ import remarkFrontmatter from 'remark-frontmatter';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
 import * as runtime from 'react/jsx-runtime';
 
-import {
-  recursiveDirectoryRead,
-  filePathToSlug,
-  PAGES_ROOT_PATH,
-} from './utils';
+import { PAGES_ROOT_PATH, getSlugs } from './utils';
 
-import { PostMetadata } from '@gxxc-blog/types';
+import { type ContentMetadata } from '@gxxc-blog/types';
 import { ComponentType } from 'react';
 
-export function getFilePathArrays() {
-  const absoluteFileNames = recursiveDirectoryRead(PAGES_ROOT_PATH);
-
-  const startIndex = PAGES_ROOT_PATH.length + 1;
-  return absoluteFileNames.map((fileName) =>
-    fileName.slice(startIndex).split('/')
-  );
-}
-
-export function getPageSlugs() {
-  const absoluteFileNames = recursiveDirectoryRead(PAGES_ROOT_PATH);
-  const startIndex = PAGES_ROOT_PATH.length + 1;
-
-  return absoluteFileNames?.map((fileName) => {
-    const lastSegment = fileName?.lastIndexOf('/');
-    fileName =
-      fileName.slice(lastSegment) === 'index'
-        ? fileName.slice(0, lastSegment)
-        : fileName;
-
-    return filePathToSlug(fileName?.slice(startIndex));
-  });
-}
-
-export function getPageSlugArrays() {
-  const absoluteFileNames = recursiveDirectoryRead(PAGES_ROOT_PATH);
-
-  const startIndex = PAGES_ROOT_PATH.length + 1;
-  return absoluteFileNames?.map((fileName) => {
-    const slugArray = filePathToSlug(fileName?.slice(startIndex)).split('/');
-    if (slugArray.at(-1) === 'index') {
-      slugArray.pop();
-    }
-    return slugArray;
-  });
+export function getPageStaticParams() {
+  return getSlugs('page').map((slug) => ({ slug: slug?.split('/') }));
 }
 
 export async function loadRawPage(page: string[] = []) {
@@ -67,8 +30,9 @@ export async function loadRawPage(page: string[] = []) {
   return await readFile(fileName, 'utf8');
 }
 
-export async function loadPageContent(page: string[]) {
-  const pageText = await loadRawPage(page);
+export async function loadPage({ slug }: { slug: string[] }) {
+  const pageText = await loadRawPage(slug);
+
   // @ts-expect-error hopefully this gets resolved with an upcoming update
   const { default: MdxContent, frontmatter } = await evaluate(pageText, {
     ...runtime,
@@ -77,10 +41,12 @@ export async function loadPageContent(page: string[]) {
 
   return { MdxContent, frontmatter } as {
     MdxContent: ComponentType<{ [str: string]: unknown }>;
-    frontmatter: PostMetadata;
+    frontmatter: ContentMetadata<'page'>;
   };
 }
 
-export function getPageStaticParams() {
-  return getPageSlugArrays().map((page) => ({ page }));
+export function slugArrayToString(slugArray: string[] = []) {
+  const file = slugArray?.at(-1) ?? 'index';
+  const relativePath = slugArray.slice(0, -1)?.join('/');
+  return relativePath ? `${relativePath}/${file}` : file;
 }

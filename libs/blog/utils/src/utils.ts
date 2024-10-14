@@ -1,14 +1,20 @@
 import { readdirSync, statSync } from 'node:fs';
 import * as path from 'node:path';
 
+import matter, { GrayMatterFile } from 'gray-matter';
 import { noCase } from 'change-case';
 import { titleCase } from 'title-case';
 
 import {
-  type PostMetadata,
   type FrontMatterImageDeclaration,
   type FrontMatterImageMapping,
+  ContentType,
+  ContentMetadata,
 } from '@gxxc-blog/types';
+
+export type GrayMatterSource<T extends ContentType> = GrayMatterFile<string> & {
+  data: ContentMetadata<T>;
+};
 
 const WORKSPACE_ROOT = process.env.NX_WORKSPACE_ROOT as string;
 export const PAGES_ROOT_PATH = path.join(
@@ -57,16 +63,10 @@ export function toSlugArray(slug: string) {
   return slug.split('/');
 }
 
-export function slugArrayToString(slugArray: string[] = []) {
-  const file = slugArray?.at(-1) ?? 'index';
-  const relativePath = slugArray.slice(0, -1)?.join('/');
-  return relativePath ? `${relativePath}/${file}` : file;
-}
-
-export function addExtraMetadata<D extends PostMetadata>(
-  contentType: 'page' | 'post',
+export function addExtraMetadata<T extends ContentType>(
+  contentType: T,
   path: string,
-  data = {} as D
+  data = {} as ContentMetadata<T>
 ) {
   const slug = filePathToSlug(path);
   const extraData = {
@@ -108,4 +108,76 @@ export async function parseFrontMatterImages(
         Promise.resolve({})
       )
     : {};
+}
+
+export function loadContent<T extends ContentType>(
+  contentType: T,
+  isDisplayable: (data: ContentMetadata<T>) => boolean,
+  limit = 10
+) {
+  const rootPath = contentType === 'post' ? POSTS_ROOT_PATH : PAGES_ROOT_PATH;
+
+  return readdirSync(rootPath)
+    .filter((fname) => /\.mdx?$/.test(fname))
+    .filter((fname) => !fname.startsWith('.'))
+    .map((path) => {
+      const absoluteFilename = `${rootPath}/${path}`;
+      const isDirectory = statSync(absoluteFilename).isDirectory();
+      if (isDirectory) {
+        return undefined;
+      }
+
+      const source = readFileMetaData<T>(absoluteFilename);
+      if (typeof source.data.date !== 'object') {
+        source.data.date = new Date(source.data.date);
+      }
+
+      if (!isDisplayable(source.data)) {
+        return undefined;
+      }
+
+      const data = addExtraMetadata(contentType, path, source.data);
+      source.data = data;
+
+      return source;
+    })
+    .filter((p): p is GrayMatterSource<T> => !!p)
+    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .slice(0, limit);
+}
+
+const contentPath: { post: string; page: string } = {
+  post: POSTS_ROOT_PATH,
+  page: PAGES_ROOT_PATH,
+};
+
+export function readFileMetaData<T extends ContentType>(
+  absoluteFilename: string
+) {
+  return matter.read(absoluteFilename) as GrayMatterSource<T>;
+}
+
+export function getSlugs<T extends ContentType>(
+  contentType: T,
+  isDisplayable: (source: ContentMetadata<T>) => boolean = () => true
+) {
+  const rootPath = contentPath[contentType];
+  const absoluteFileNames = recursiveDirectoryRead(rootPath);
+  const startIndex = rootPath.length + 1;
+
+  return absoluteFileNames
+    ?.map((fileName) => {
+      const source = readFileMetaData<T>(fileName);
+      if (!isDisplayable?.(source.data)) {
+        return undefined;
+      }
+
+      const lastSegment = fileName?.lastIndexOf('/');
+      if (fileName.slice(lastSegment) === '/index.md') {
+        fileName = fileName.slice(0, lastSegment);
+      }
+
+      return filePathToSlug(fileName?.slice(startIndex)) || '/';
+    })
+    .filter(Boolean);
 }
