@@ -112,7 +112,7 @@ export async function parseFrontMatterImages(
 
 export function loadContent<T extends ContentType>(
   contentType: T,
-  isDisplayable: (data: ContentMetadata<T>) => boolean,
+  filter: (data: ContentMetadata<T>) => boolean,
   limit = 10
 ) {
   const rootPath = contentType === 'post' ? POSTS_ROOT_PATH : PAGES_ROOT_PATH;
@@ -129,10 +129,15 @@ export function loadContent<T extends ContentType>(
 
       const source = readFileMetaData<T>(absoluteFilename);
       if (typeof source.data.date !== 'object') {
-        source.data.date = new Date(source.data.date);
+        if (source.data.date) {
+          const date = new Date(source.data.date);
+          source.data.date = isNaN(date.getTime()) ? undefined : date;
+        } else {
+          source.data.date = undefined;
+        }
       }
 
-      if (!isDisplayable(source.data)) {
+      if (!filter(source.data)) {
         return undefined;
       }
 
@@ -142,7 +147,11 @@ export function loadContent<T extends ContentType>(
       return source;
     })
     .filter((p): p is GrayMatterSource<T> => !!p)
-    .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+    .sort((a, b) => {
+      if (!a.data.date) return 1;
+      if (!b.data.date) return -1;
+      return b.data.date.getTime() - a.data.date.getTime();
+    })
     .slice(0, limit);
 }
 
@@ -159,7 +168,7 @@ export function readFileMetaData<T extends ContentType>(
 
 export function getSlugs<T extends ContentType>(
   contentType: T,
-  isDisplayable: (source: ContentMetadata<T>) => boolean = () => true
+  filter: (source: ContentMetadata<T>) => boolean = () => true
 ) {
   const rootPath = contentPath[contentType];
   const absoluteFileNames = recursiveDirectoryRead(rootPath);
@@ -168,7 +177,7 @@ export function getSlugs<T extends ContentType>(
   return absoluteFileNames
     ?.map((fileName) => {
       const source = readFileMetaData<T>(fileName);
-      if (!isDisplayable?.(source.data)) {
+      if (!filter?.(source.data)) {
         return undefined;
       }
 

@@ -15,7 +15,7 @@ export type DateString = Date;
 export type EmptyRecord = Record<string, never>;
 
 export type ContentMetadata<T extends ContentType> = (T extends 'post'
-  ? { date: DateString }
+  ? { date?: DateString }
   : EmptyRecord) & {
   title?: string;
   slug: string;

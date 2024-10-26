@@ -46,17 +46,28 @@ export async function loadPost(params: { slug: string }) {
 }
 
 export function getRecentPosts(limit?: number) {
-  return loadContent('post', isDisplayable, limit).map(({ data, content }) => {
-    if (!data.excerpt) {
-      data.excerpt =
-        content.length > 290 ? `${content.slice(0, 290)}\u2026` : content;
+  const posts = loadContent('post', isDisplayable, limit).map(
+    async ({ data, content }) => {
+      if (!data.excerpt) {
+        data.excerpt =
+          content.length > 290 ? `${content.slice(0, 290)}\u2026` : content;
+      }
+
+      // @ts-expect-error hopefully this gets resolved with an upcoming update
+      const { default: MdxContent } = (await evaluate(data.excerpt, {
+        ...runtime,
+        remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
+      })) as {
+        MdxContent: ComponentType<{ [str: string]: unknown }>;
+        frontmatter: ContentMetadata<'post'>;
+      };
+
+      return {
+        MdxContent,
+        data,
+      };
     }
+  );
 
-    const recentPosts = {
-      ...data,
-      date: data.date.getTime(),
-    };
-
-    return recentPosts;
-  });
+  return Promise.all(posts);
 }
