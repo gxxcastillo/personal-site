@@ -1,4 +1,8 @@
-.SiteHeader {
+.Layout {
+  font-size: 1.6rem;
+}
+
+.siteHeader {
   margin: 5px auto;
-  width: 48rem;
+  width: 64rem;
 }

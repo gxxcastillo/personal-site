@@ -3,6 +3,7 @@
   flex-direction: row;
   align-items: center;
   column-gap: 6.4rem;
+  margin-top: 1.4rem;
 }
 
 .home {

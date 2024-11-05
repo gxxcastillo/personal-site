@@ -10,7 +10,7 @@ export interface PostHeaderProps {
 export function PostHeader({ postID, children }: PostHeaderProps) {
   return (
     <header className={styles.PostHeader}>
-      <h3 className="title">{children}</h3>
+      <h2 className={styles.title}>{children}</h2>
     </header>
   );
 }

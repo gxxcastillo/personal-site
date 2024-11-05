@@ -9,7 +9,7 @@ export interface PageHeaderProps {
 export function PageHeader({ children }: PageHeaderProps) {
   return (
     <header className={styles.PageHeader}>
-      <h3 className='title'>{children}</h3>
+      <h2 className={styles.title}>{children}</h2>
     </header>
   );
 }

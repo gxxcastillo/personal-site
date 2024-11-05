@@ -16,10 +16,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className={styles.SiteHeader}>
-          <SiteHeader nav={<SiteNav />} />
+        <div className={styles.Layout}>
+          <div className={styles.siteHeader}>
+            <SiteHeader nav={<SiteNav />} />
+          </div>
+          <div className={styles.siteContent}>{children}</div>
         </div>
-        {children}
       </body>
     </html>
   );

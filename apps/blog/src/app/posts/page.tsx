@@ -1,12 +1,12 @@
 import { PageHeader, PostSummaries } from '@gxxc-blog/components';
-import { PageLayout } from '@gxxc-blog/layouts';
+import { ContentLayout } from '@gxxc-blog/layouts';
 import { getRecentPosts } from '@gxxc-blog/utils';
 
-export default async function PostIndex() {
+export default async function PostsIndex() {
   const posts = await getRecentPosts();
   return (
-    <PageLayout header={<PageHeader>Recent Posts</PageHeader>} footer={' '}>
+    <ContentLayout header={<PageHeader>Recent Posts</PageHeader>} footer={' '}>
       <PostSummaries posts={posts} />
-    </PageLayout>
+    </ContentLayout>
   );
 }

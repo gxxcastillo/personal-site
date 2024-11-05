@@ -1,2 +1,1 @@
-export * from './PageLayout/PageLayout';
-export * from './PostLayout/PostLayout';
+export * from './ContentLayout/ContentLayout';

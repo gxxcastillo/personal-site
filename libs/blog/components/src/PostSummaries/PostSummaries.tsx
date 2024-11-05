@@ -30,9 +30,9 @@ export function PostSummaries({ posts }: PostSummariesProps) {
           <li key={slug} className={styles.post}>
             <div>
               {title && (
-                <h5>
+                <h3>
                   <Link href={path}>{title}</Link>
-                </h5>
+                </h3>
               )}
               <div>
                 <MdxContent />

@@ -1,6 +1,6 @@
-.PostLayout {
-  width: 48rem;
-  margin: 6rem auto;
+.SiteLayout {
+  width: 64rem;
+  margin: 2.4rem auto;
 
   display: flex;
   flex-direction: column;

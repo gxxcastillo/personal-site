@@ -1,5 +1,7 @@
 .PostSummaries {
+  list-style: none;
   display: flex;
   flex-direction: column;
+  padding-left: 0;
   row-gap: 2.4rem;
 }

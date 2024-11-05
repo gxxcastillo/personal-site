@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { PostLayout } from '@gxxc-blog/layouts';
+import { ContentLayout } from '@gxxc-blog/layouts';
 import * as BlogComponents from '@gxxc-blog/components';
 import { getPostStaticPaths, loadPost } from '@gxxc-blog/utils';
 
@@ -23,12 +23,12 @@ export default async function Post({ params }: PostPageGetStaticPropsArgs) {
   }
 
   return (
-    <PostLayout
+    <ContentLayout
       header={<PostHeader postID={slug.toString()}>{data.title}</PostHeader>}
       footer={<PostFooter tags={data.tags}> </PostFooter>}
     >
       <MdxContent components={components} {...data} images={images} />
-    </PostLayout>
+    </ContentLayout>
   );
 }
 
