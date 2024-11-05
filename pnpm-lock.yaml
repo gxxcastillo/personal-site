@@ -220,7 +220,7 @@ importers:
 
   libs/blog/utils:
     dependencies:
-      '@gxxc-blog/ai-tools':
+      '@gxxc-blog/ai':
         specifier: workspace:^
         version: link:../ai
       '@gxxc-blog/types':

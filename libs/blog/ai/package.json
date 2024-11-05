@@ -1,0 +1,17 @@
+{
+  "name": "@gxxc-blog/ai",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "ai-test": "tsx ./src/ai-test.ts",
+    "ai-excerpt": "tsx ./src/excerpt.ts",
+    "ai-summary": "tsx ./src/summary.ts"
+  },
+  "dependencies": {
+    "openai": "^4.68.4"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2"
+  }
+}
