@@ -1,8 +1,19 @@
 .Layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-size: 1.6rem;
 }
 
 .siteHeader {
   margin: 5px auto;
   width: 64rem;
+}
+
+.siteContent {
+  flex: 1;
+}
+
+.siteFooter {
+  background-color: #f8f9fa;
 }

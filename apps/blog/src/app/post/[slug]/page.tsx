@@ -24,7 +24,11 @@ export default async function Post({ params }: PostPageGetStaticPropsArgs) {
 
   return (
     <ContentLayout
-      header={<PostHeader postID={slug.toString()}>{data.title}</PostHeader>}
+      header={
+        <PostHeader postID={slug.toString()} subTitle={data['sub-title']}>
+          {data.title}
+        </PostHeader>
+      }
       footer={<PostFooter tags={data.tags}> </PostFooter>}
     >
       <MdxContent components={components} {...data} images={images} />

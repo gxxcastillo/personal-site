@@ -1,4 +1,4 @@
-import { SiteHeader, SiteNav } from '@gxxc-blog/components';
+import { SiteFooter, SiteHeader, SiteNav } from '@gxxc-blog/components';
 import './global.css';
 
 import styles from './layout.module.css';
@@ -21,6 +21,9 @@ export default function RootLayout({
             <SiteHeader nav={<SiteNav />} />
           </div>
           <div className={styles.siteContent}>{children}</div>
+          <div className={styles.siteFooter}>
+            <SiteFooter />
+          </div>
         </div>
       </body>
     </html>

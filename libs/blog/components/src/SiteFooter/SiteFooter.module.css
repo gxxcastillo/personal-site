@@ -1,7 +1,22 @@
 .SiteFooter {
   color: purple;
+  width: 64rem;
+  margin: 0 auto;
+  padding: 1rem;
 }
 
-.SiteFooter:hover {
-  cursor: pointer;
+.links {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  column-gap: 1.8rem;
+
+  & a {
+    transition: text-shadow 0.2s ease;
+  }
+
+  & a:hover {
+    border: none;
+    text-shadow: 0 0 5px #444, 0 0 10px #444, 0 0 20px #444, 0 0 30px #444;
+  }
 }

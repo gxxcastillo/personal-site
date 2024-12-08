@@ -18,6 +18,7 @@ export type ContentMetadata<T extends ContentType> = (T extends 'post'
   ? { date?: DateString }
   : EmptyRecord) & {
   title?: string;
+  'sub-title'?: string;
   slug: string;
   path: string;
   excerpt?: string;
