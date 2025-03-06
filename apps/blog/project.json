@@ -1,7 +1,7 @@
 {
   "name": "blog",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "blog",
+  "sourceRoot": "{projectRoot}/src",
   "projectType": "application",
   "tags": [],
   "targets": {
@@ -36,6 +36,14 @@
           "dev": false
         }
       }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsx publish.ts",
+        "cwd": "{projectRoot}/scripts"
+      },
+      "dependsOn": ["^build"]
     },
     "lint": {
       "executor": "@nx/eslint:lint"

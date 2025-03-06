@@ -1,5 +1,5 @@
 {
-  "name": "@gxxc-blog/ai",
+  "name": "@gxxc-blog/tools",
   "version": "0.0.1",
   "type": "module",
   "exports": "./src/index.ts",
@@ -9,9 +9,16 @@
     "ai-summary": "tsx ./src/summary.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.693.0",
+    "@aws-sdk/lib-storage": "^3.758.0",
+    "glob": "^11.0.0",
     "openai": "^4.68.4"
   },
   "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/js-yaml": "^4.0.9",
+    "dotenv": "^16.4.5",
+    "js-yaml": "^4.1.0",
     "tsx": "^4.19.2"
   }
 }

@@ -4,13 +4,15 @@
   "type": "module",
   "license": "MIT",
   "private": true,
-  "scripts": {
-    "publish": "./scripts/publish.sh"
-  },
   "dependencies": {
     "@gxxc-blog/components": "workspace:^",
+    "@gxxc-blog/tools": "workspace:^",
     "@gxxc-blog/layouts": "workspace:^",
     "@gxxc-blog/utils": "workspace:^",
     "remark-frontmatter": "^5.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "ts-node": "10.9.1"
   }
 }

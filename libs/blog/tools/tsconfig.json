@@ -1,7 +1,6 @@
 {
   "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-    "jsx": "react-jsx",
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
@@ -23,5 +22,5 @@
     "**/*.test.js",
     "**/*.spec.jsx",
     "**/*.test.jsx"
-  ],
+  ]
 }

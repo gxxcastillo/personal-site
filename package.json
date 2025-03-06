@@ -30,6 +30,7 @@
     "@nx/vite": "20.0.5",
     "@nx/web": "20.0.5",
     "@nx/workspace": "20.0.5",
+    "@nx/devkit": "20.0.5",
     "@swc-node/register": "1.9.2",
     "@swc/cli": "~0.3.14",
     "@swc/core": "1.5.7",
