@@ -5,12 +5,12 @@ import * as BlogComponents from '@gxxc-blog/components';
 import { ContentLayout } from '@gxxc-blog/layouts';
 import { getPageStaticParams, loadPage } from '@gxxc-blog/utils';
 
-export type PageProps = { params: { slug: string[] } };
+type PageProps = { params: Promise<{ slug: string[] }> };
 
 export default async function Page({ params }: PageProps) {
   const components = Object.assign({}, BlogComponents, { Image });
 
-  const { MdxContent, data, images } = await loadPage(params);
+  const { MdxContent, data, images } = await loadPage(await params);
 
   return (
     <ContentLayout header={<PageHeader>{data.title}</PageHeader>} footer={' '}>

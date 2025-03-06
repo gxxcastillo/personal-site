@@ -5,17 +5,18 @@ import * as BlogComponents from '@gxxc-blog/components';
 import { getPostStaticPaths, loadPost } from '@gxxc-blog/utils';
 
 export type PostPageGetStaticPropsArgs = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 const { PostFooter, PostHeader } = BlogComponents;
 
 export default async function Post({ params }: PostPageGetStaticPropsArgs) {
-  const { slug } = params;
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
   const components = Object.assign({}, BlogComponents, { Image });
-  const { MdxContent, data, images } = await loadPost(params);
+  const { MdxContent, data, images } = await loadPost(resolvedParams);
 
   if (!slug) {
     // @TODO - Will this ever happen? Can I just render the 404 page instead?
