@@ -6,6 +6,10 @@ const publisher = new NxS3Publisher({
   appProject: 'blog',
   contentProject: 'content',
   buildTarget: 'build',
+  options: {
+    contentFilter: /\.html$/,
+    fileExtension: '',
+  },
 });
 
 try {

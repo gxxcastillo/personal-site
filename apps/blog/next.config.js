@@ -16,6 +16,9 @@ const nextConfig = {
    *
    * Since the buildId can not work to invalidate the cache, it will need to be
    * manually invalidated by updating the file's hash in .publish/state.yml
+   * 
+   * @TODO - Turns out this was not enough, There is still an id, `$1` being generated
+   * and that is bypassing the caching setup
    */
   generateBuildId: () => 'static-build-id',
   nx: {

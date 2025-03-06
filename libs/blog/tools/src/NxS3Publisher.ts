@@ -39,7 +39,7 @@ export interface INxS3Publisher {
   /**
    * General options
    */
-  options?: Options;
+  options: Options;
 }
 
 export type FilePublishState = {
@@ -96,8 +96,6 @@ export class NxS3Publisher {
     contentProject,
     options,
   }: INxS3Publisher) {
-    const { contentFilter = /\.html$/, fileExtension = '.html' } =
-      options ?? {};
     dotenv.config();
 
     if (!publishPath || !buildTarget || !appProject || !contentProject) {
@@ -118,7 +116,7 @@ export class NxS3Publisher {
     this.bucketName = process.env.S3_BUCKET_NAME as string;
     this.buildTarget = buildTarget;
     this.nxProject = appProject;
-    this.options = { contentFilter, fileExtension };
+    this.options = options;
 
     if (!this.bucketName) {
       throw new Error('Missing required environment variable: S3_BUCKET_NAME');
@@ -162,7 +160,7 @@ export class NxS3Publisher {
       fileSplit.pop();
     }
 
-    return relative(this.publishPath, fileSplit.join('.'));
+    return fileSplit.join('.');
   }
 
   private async loadPublishState(): Promise<PublishState> {
@@ -207,11 +205,10 @@ export class NxS3Publisher {
       const fileUploads: FileUpload[] = [];
       for (const { filePath, hasChanged } of files) {
         const relativePath = relative(this.publishPath, filePath);
-        const filename = this.normalizeName(relativePath);
         if (hasChanged) {
           const fileExtension = getFileExtension(filePath);
           fileUploads.push({
-            filename,
+            filename: this.normalizeName(relativePath),
             readStream: createReadStream(filePath),
             contentType: fileExtension
               ? contentTypeMap[fileExtension]
@@ -317,7 +314,7 @@ export class NxS3Publisher {
   }
 }
 
-export function getFileExtension(filename: string): string | undefined {
-  const lastDotIndex = filename.lastIndexOf('.');
-  return lastDotIndex > -1 ? filename.slice(lastDotIndex + 1) : undefined;
+export function getFileExtension(filePath: string): string | undefined {
+  const lastDotIndex = filePath.lastIndexOf('.');
+  return lastDotIndex > -1 ? filePath.slice(lastDotIndex + 1) : undefined;
 }
