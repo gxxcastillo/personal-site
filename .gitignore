@@ -41,8 +41,15 @@ Thumbs.db
 
 .nx/cache
 .nx/workspace-data
-.obsidian
 .next
 
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+
+# Personal Claude config
+.claude.local
+
+# Nested content repo (tracked separately)
+libs/blog/content/.git
+libs/blog/content/pages/*
+libs/blog/content/posts/*

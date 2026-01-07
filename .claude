@@ -1,0 +1,94 @@
+# Blog Publishing Tool
+
+## Project Overview
+
+An Nx monorepo for building and publishing a static blog. Uses Next.js for the frontend with a modular library structure for content, components, and utilities.
+
+## Project Structure
+
+```
+apps/
+  blog/              # Next.js application
+libs/blog/
+  content/           # Markdown content (posts and pages)
+    posts/           # Dated blog posts
+    pages/           # Static pages (long-lived, evolving content)
+  components/        # React UI components
+  layouts/           # Page layout components
+  styles/            # CSS styles
+  types/             # TypeScript type definitions
+  utils/             # Utility functions
+  assets/            # Static assets (images, etc.)
+```
+
+## Content Types
+
+### Posts (`libs/blog/content/posts/`)
+Dated articles. Once published, these are rarely updated.
+
+### Pages (`libs/blog/content/pages/`)
+Static content that evolves over time - project showcases, about pages, and other evergreen content.
+
+## Frontmatter Schema
+
+All markdown files use YAML frontmatter:
+
+```yaml
+---
+title: 'Post Title'
+sub-title: 'Optional subtitle'
+date: '2024-01-15T00:00:00.000Z'  # Required for posts
+slug: 'post-slug'                  # Auto-generated from filename if omitted
+path: '/posts/post-slug'           # Auto-generated if omitted
+excerpt: 'Brief description for previews and SEO'
+tags: [tag1, tag2, tag3]
+status: DRAFT | PUBLISHED          # DRAFT = work in progress, PUBLISHED = live
+author:
+  name: Author Name
+  email: optional@email.com
+images:
+  hero: '/path/to/image.jpg'
+---
+```
+
+## Tech Stack
+
+- **Build System**: Nx 20.x
+- **Frontend**: Next.js 15, React 18
+- **Language**: TypeScript 5.x
+- **Styling**: CSS Modules
+- **Content**: Markdown with gray-matter for frontmatter parsing
+- **Testing**: Jest, Vitest, Cypress
+- **Package Manager**: pnpm
+
+## Common Commands
+
+```bash
+# Development
+nx serve blog              # Start dev server
+nx build blog              # Production build
+nx test blog               # Run tests
+nx lint blog               # Run linter
+
+# Content operations
+nx build blog-content      # Process content library
+```
+
+## Content Status Workflow
+
+- `DRAFT`: Work in progress, not published
+- `PUBLISHED`: Live on the site
+
+When scanning posts for completion, check for:
+1. Missing or incomplete frontmatter (especially title, excerpt, date)
+2. Posts with `status: DRAFT` that have substantial content
+3. Posts with placeholder text or TODO markers
+4. Posts missing code examples where they'd be helpful
+5. Posts that trail off or lack conclusions
+
+## Development Guidelines
+
+- Follow existing Nx conventions
+- Prefer small, focused changes
+- Run tests after modifications
+- Use existing library structure
