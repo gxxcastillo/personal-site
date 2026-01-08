@@ -1,3 +1,13 @@
+.PageHeader {
+  margin-bottom: var(--space-lg, 2.4rem);
+  padding-bottom: var(--space-md, 1.6rem);
+  border-bottom: 1px solid var(--color-border, #e5e5e5);
+}
+
 .title {
-  font-size: 4.8rem;
+  font-size: 3.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-text, #1a1a1a);
 }

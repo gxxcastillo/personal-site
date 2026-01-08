@@ -25,19 +25,21 @@ export function PostSummaries({ posts }: PostSummariesProps) {
   return (
     <ol className={styles.PostSummaries}>
       {posts.map(({ MdxContent, data }) => {
-        const { slug, path, title } = data;
+        const { slug, path, title, excerpt } = data;
         return (
-          <li key={slug} className={styles.post}>
-            <div>
-              {title && (
-                <h3>
-                  <Link href={path}>{title}</Link>
-                </h3>
-              )}
-              <div>
+          <li key={slug} className={styles.PostSummary}>
+            {title && (
+              <h3 className={styles.postTitle}>
+                <Link href={path}>{title}</Link>
+              </h3>
+            )}
+            {excerpt ? (
+              <p className={styles.postExcerpt}>{excerpt}</p>
+            ) : (
+              <div className={styles.postExcerpt}>
                 <MdxContent />
               </div>
-            </div>
+            )}
           </li>
         );
       })}

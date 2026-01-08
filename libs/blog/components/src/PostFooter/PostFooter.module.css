@@ -1,11 +1,19 @@
 .PostFooter {
+  margin-top: var(--space-2xl, 4.8rem);
+  padding-top: var(--space-lg, 2.4rem);
+  border-top: 1px solid var(--color-border, #e5e5e5);
 }
 
 .tags {
-  font-size: 1.6rem;
   display: flex;
   flex-direction: row;
-  column-gap: 1.4rem;
-  justify-content: baseline;
-  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-sm, 0.8rem);
+  align-items: center;
+}
+
+.tagsLabel {
+  font-size: 1.4rem;
+  color: var(--color-text-muted, #777);
+  margin-right: var(--space-sm, 0.8rem);
 }

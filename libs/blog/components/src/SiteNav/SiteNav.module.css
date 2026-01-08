@@ -1,6 +1,19 @@
 .SiteNav {
   display: flex;
   flex-direction: row;
-  column-gap: 2.4rem;
-  font-size: 1.8rem;
+  column-gap: var(--space-lg, 2.4rem);
+  font-size: 1.6rem;
+}
+
+.SiteNav a {
+  color: var(--color-text-secondary, #555);
+  text-decoration: none;
+  padding: var(--space-xs, 0.4rem) 0;
+  position: relative;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--color-text, #1a1a1a);
+    text-decoration: none;
+  }
 }

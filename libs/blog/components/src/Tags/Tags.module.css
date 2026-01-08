@@ -1,7 +1,26 @@
 .Tags {
-  margin-left: 0;
-  padding-left: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-direction: row;
-  column-gap: 1.6rem;
+  flex-wrap: wrap;
+  gap: var(--space-sm, 0.8rem);
+}
+
+.tag {
+  display: inline-block;
+  font-size: 1.3rem;
+  color: var(--color-text-secondary, #555);
+  background-color: var(--color-background-subtle, #f8f9fa);
+  padding: var(--space-xs, 0.4rem) var(--space-sm, 0.8rem);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background-color: var(--color-accent, #0066cc);
+    color: white;
+    text-decoration: none;
+  }
 }

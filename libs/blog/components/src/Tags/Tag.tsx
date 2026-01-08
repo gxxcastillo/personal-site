@@ -8,7 +8,9 @@ export function Tags({ tags }: ITags) {
   return (
     <ul className={styles.Tags}>
       {tags.map((tag) => (
-        <div key={tag}>#{tag}</div>
+        <li key={tag} className={styles.tag}>
+          {tag}
+        </li>
       ))}
     </ul>
   );
