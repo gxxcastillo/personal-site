@@ -8,7 +8,7 @@ This is my personal website, built with [NextJS](https://nextjs.org/) and using 
 
 Raw content files are ignored by git and live in the `@gxxc-blob/content` package. I edit them using [Obsidian](https://obsidian.md/).
 
-## Adding content
+## Managing content
 
 There are two types of content: posts and pages and both are generated from markdown files that use frontmatter to define metadata.
 
@@ -16,11 +16,19 @@ To add a new post or page, create a new markdown file in the `@gxxc-blob/content
 
 Note, while you could edit your files directly in your IDE, I recommend using [Obsidian](https://obsidian.md/) for a better editing experience.
 
-### Publishing content
+### Publishing
 
-To mark content as available to the public, set the `published` field in the frontmatter to `true`. This will make the post visible in the UI.  The `date` field is used to restrict posts from being accidentally published too early.
+To mark content as available to the public, set the `published` field in the frontmatter to `true`. This will make the post visible in the UI. The `date` field is used to restrict posts from being accidentally published too early.
 
-Once you've updated your content, create a new build and publish all content with the latest changes.
+Once you've updated your content, create a new build and publish all content to S3 using `pnpm nx publish blog`.
+
+**Static export files:**
+Next.js static export (`output: 'export'`) generates both `.html` and `.txt` files for each page:
+
+- `.html` — Full page for direct URL access (uploaded without extension for clean URLs)
+- `.txt` — RSC (React Server Component) payload for client-side navigation between pages
+
+Both are required for the site to work properly. The `.html` files serve initial page loads while `.txt` files enable fast client-side transitions without full page reloads.
 
 ## Start the app
 
@@ -29,16 +37,19 @@ Once you've updated your content, create a new build and publish all content wit
 I'm using pnpm as the package manager and nvm for managing node versions.
 
 Install node via nvm
+
 ```bash
 nvm use
 ```
 
 Install pnpm
+
 ```
 corepack enable pnpm
 ```
 
 Install dependencies
+
 ```
 pnpm install
 ```
@@ -48,16 +59,19 @@ Start the development server run `nx serve blog`. Open your browser and navigate
 ## Running Tasks
 
 You can execute tasks with Nx use the following syntax:
+
 ```
 nx <target> <project> <...options>
 ```
 
 You can also run multiple targets:
+
 ```
 nx run-many -t <target1> <target2>
 ```
 
 ..or add `-p` to filter specific projects
+
 ```
 nx run-many -t <target1> <target2> -p <proj1> <proj2>
 ```
@@ -65,9 +79,9 @@ nx run-many -t <target1> <target2> -p <proj1> <proj2>
 ## Options
 
 ### Environment Variables
+
 ```
 SHOW_PUBLISHED_ONLY | boolean | default: false
 ```
+
 When set to true, only published posts will be shown.
-
-

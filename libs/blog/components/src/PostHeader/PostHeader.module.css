@@ -1,5 +1,5 @@
 .PostHeader {
-  margin-bottom: var(--space-lg, 2.4rem);
+  margin-bottom: var(--space-md, 1.6rem);
   padding-bottom: var(--space-md, 1.6rem);
   border-bottom: 1px solid var(--color-border, #e5e5e5);
 }

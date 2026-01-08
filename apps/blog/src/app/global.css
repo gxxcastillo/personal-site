@@ -165,8 +165,8 @@ article a,
    ================================================ */
 ul,
 ol {
-  margin: 0 0 var(--space-lg);
-  padding-left: var(--space-lg);
+  margin: 0;
+  padding: 0;
 }
 
 ul {
@@ -180,6 +180,7 @@ ol {
 li {
   margin-bottom: var(--space-sm);
   line-height: var(--line-height);
+  list-style: none;
 }
 
 li > ul,
