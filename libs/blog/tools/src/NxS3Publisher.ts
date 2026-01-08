@@ -4,7 +4,6 @@ import path, { relative } from 'node:path';
 import { spawn } from 'node:child_process';
 
 import { S3 } from '@aws-sdk/client-s3';
-import { readCachedProjectGraph } from '@nx/devkit';
 import { Upload } from '@aws-sdk/lib-storage';
 import { load as loadYaml, dump as dumpYaml } from 'js-yaml';
 import { createHash } from 'crypto';
@@ -29,12 +28,6 @@ export interface INxS3Publisher {
    * that gets built
    */
   appProject: string;
-
-  /**
-   * The name of the project that contains the content that
-   * is used by the application being built
-   */
-  contentProject: string;
 
   /**
    * General options
@@ -89,28 +82,17 @@ export class NxS3Publisher {
   private readonly options: Options;
   private readonly s3Client: S3;
 
-  constructor({
-    publishPath,
-    buildTarget,
-    appProject,
-    contentProject,
-    options,
-  }: INxS3Publisher) {
+  constructor({ publishPath, buildTarget, appProject, options }: INxS3Publisher) {
     dotenv.config();
 
-    if (!publishPath || !buildTarget || !appProject || !contentProject) {
+    if (!publishPath || !buildTarget || !appProject) {
       throw new Error('Missing required arguments');
     }
 
     this.workspaceRoot = process.env.NX_WORKSPACE_ROOT as string;
     this.publishPath = path.join(this.workspaceRoot, publishPath);
 
-    const projectGraph = readCachedProjectGraph();
-    const contentPath = projectGraph.nodes[contentProject].data.root;
-    if (!contentPath) {
-      throw new Error(`Project ${contentPath} not found`);
-    }
-
+    const contentPath = 'libs/blog/content';
     const configPath = `${contentPath}/${CONTENT_CONFIG_FOLDER}/${PUBLISH_CONFIG_FILE}`;
     this.configPath = path.join(this.workspaceRoot, configPath);
     this.bucketName = process.env.S3_BUCKET_NAME as string;

@@ -92,3 +92,17 @@ When scanning posts for completion, check for:
 - Prefer small, focused changes
 - Run tests after modifications
 - Use existing library structure
+- **All content must live in `libs/blog/content/`** (posts/ or pages/). Do not create dedicated routes in `apps/blog/src/app/` for content pages.
+
+## Shortcodes
+
+Content files use shortcode syntax `{{shortcodeName}}` to embed dynamic content. Shortcodes keep markdown free of React/JSX while allowing dynamic sections.
+
+Available shortcodes:
+- `{{projectList}}` - Renders the list of published projects
+
+To add a new shortcode:
+1. Create or use an existing component in `libs/blog/components/`
+2. Wire up data loading and pass the element in `apps/blog/src/app/[[...slug]]/page.tsx`
+
+The shortcode gets transformed to `{props.shortcodes.shortcodeName}` which renders a pre-built React element passed as a prop.

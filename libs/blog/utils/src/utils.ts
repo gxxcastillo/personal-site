@@ -103,8 +103,10 @@ export async function addExtraMetadata<T extends ContentType>(
   const { data } = source;
 
   const slug = filePathToSlug(path);
+  // Posts use /post/{slug}, pages use /{slug} directly (no /page/ prefix)
+  const urlPath = contentType === 'post' ? `/post/${slug}` : `/${slug}`;
   const extraData: Record<string, string> = {
-    path: `/${contentType}/${slug}`,
+    path: urlPath,
     title: data.title || titleCase(noCase(slug)),
     slug,
   };
@@ -144,6 +146,23 @@ export async function parseFrontMatterImages(
     : {};
 }
 
+/**
+ * Extract shortcodes from content and replace with JSX expressions.
+ * Shortcodes use the syntax: {{shortcodeName}}
+ * They get transformed to {props.shortcodes.shortcodeName} for MDX rendering.
+ */
+export function parseShortcodes(content: string): {
+  content: string;
+  shortcodes: string[];
+} {
+  const shortcodes: string[] = [];
+  const processed = content.replace(/\{\{(\w+)\}\}/g, (_, name) => {
+    shortcodes.push(name);
+    return `{props.shortcodes.${name}}`;
+  });
+  return { content: processed, shortcodes };
+}
+
 export async function loadContent<T extends ContentType>(
   contentType: T,
   slug: string[]
@@ -151,8 +170,11 @@ export async function loadContent<T extends ContentType>(
   const fileName = slugToAbsolutePath(contentType, slug);
   const fileContent = await readFile(fileName, 'utf8');
 
+  // Parse shortcodes and transform to component syntax
+  const { content: processedContent, shortcodes } = parseShortcodes(fileContent);
+
   // @ts-expect-error hopefully this gets resolved with an upcoming update
-  const { default: MdxContent, frontmatter } = await evaluate(fileContent, {
+  const { default: MdxContent, frontmatter } = await evaluate(processedContent, {
     ...runtime,
     remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
   });
@@ -163,7 +185,7 @@ export async function loadContent<T extends ContentType>(
   } as GrayMatterSource<T>);
 
   const images = await parseFrontMatterImages(data?.images);
-  return { MdxContent, data, images };
+  return { MdxContent, data, images, shortcodes };
 }
 
 export async function loadFilteredContent<T extends ContentType>(

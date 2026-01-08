@@ -1,20 +1,40 @@
+import { ReactNode } from 'react';
 import Image from 'next/image';
 
-import { PageHeader } from '@gxxc-blog/components';
+import { PageHeader, ProjectList } from '@gxxc-blog/components';
 import * as BlogComponents from '@gxxc-blog/components';
 import { ContentLayout } from '@gxxc-blog/layouts';
-import { getPageStaticParams, loadPage } from '@gxxc-blog/utils';
+import { getPageStaticParams, loadPage, getProjects } from '@gxxc-blog/utils';
 
 type PageProps = { params: Promise<{ slug: string[] }> };
 
 export default async function Page({ params }: PageProps) {
-  const components = Object.assign({}, BlogComponents, { Image });
+  const resolvedParams = await params;
+  const {
+    MdxContent,
+    data,
+    images,
+    shortcodes: usedShortcodes,
+  } = await loadPage(resolvedParams);
 
-  const { MdxContent, data, images } = await loadPage(await params);
+  // Build shortcode elements based on what's used in the content
+  const shortcodes: Record<string, ReactNode> = {};
+
+  if (usedShortcodes.includes('projectList')) {
+    const projects = await getProjects();
+    shortcodes.projectList = <ProjectList projects={projects} />;
+  }
+
+  const components = { ...BlogComponents, Image };
 
   return (
     <ContentLayout header={<PageHeader>{data.title}</PageHeader>} footer={' '}>
-      <MdxContent components={components} {...data} images={images} />
+      <MdxContent
+        components={components}
+        {...data}
+        images={images}
+        shortcodes={shortcodes}
+      />
     </ContentLayout>
   );
 }
